@@ -10,7 +10,8 @@ async def executeSQL(session: CommandSession):
             cursor.execute(session.current_arg)
             data = cursor.fetchone()
             if data:
-                await session.send(data[0])
+                await session.send(str(data))
     cursor.close()
+    db.commit()
     db.close()
 

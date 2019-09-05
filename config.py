@@ -5,4 +5,5 @@ COMMAND_START = {'', '/','／'}
 DEBUG = True
 PROGRAMMERS = {1870697069}
 REPO = 'https://github.com/lostkevin/EisuijoshiBot.git' #bot repo
+ALLOWED_GROUP = []
 print("Config Loaded")

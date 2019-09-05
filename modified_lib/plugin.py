@@ -55,6 +55,7 @@ def load_plugins(plugin_dir: str, module_prefix: str, reload=False) -> int:
     if reload:
         _plugins.clear()
         nonebot.command._registry.clear()
+        nonebot.notice_request._bus._subscribers.clear()
     for name in os.listdir(plugin_dir):
         path = os.path.join(plugin_dir, name)
         if os.path.isfile(path) and \
