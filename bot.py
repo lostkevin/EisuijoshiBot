@@ -1,6 +1,5 @@
 import nonebot
-from EisuijoshiBot import config
-
+from . import config
 if __name__ == '__main__':
     nonebot.init(config)
     nonebot.load_plugins('./plugins','plugins')
