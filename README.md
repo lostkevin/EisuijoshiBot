@@ -11,5 +11,5 @@
 + nonebot
     + 为支持重启功能,用modified_lib/下的plugin.py覆盖nonebot内的plugin.py
 + mySQL + python connector
-    + pip install mysql
+    + pip install pymysql
 
