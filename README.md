@@ -1,7 +1,4 @@
 # EisuijoshiBot
-[![License](https://img.shields.io/github/license/richardchien/nonebot.svg)](LICENSE)
-[![PyPI](https://img.shields.io/pypi/v/nonebot.svg)](https://pypi.python.org/pypi/nonebot)
-![Python](https://img.shields.io/badge/python-3.6%2B-blue.svg)
 
 永水高校使用的QQ管理机器人,用于简化报名\注册等一系列日常工作
 ## Environment
@@ -13,3 +10,13 @@
 + mySQL + python connector
     + pip install pymysql
 
+## CQHttpApi
+主动调用Api使用以下指令:
+    
+    await get_bot().call_action(action, **params)
+
+如:
+
+    params = {'group_id': session.ctx['group_id']}
+    await get_bot().call_action('set_group_leave', **params)
+具体使用方式以及参数说明见[CQHttpApi](https://cqhttp.cc/docs/)文档
