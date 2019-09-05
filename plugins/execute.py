@@ -9,6 +9,8 @@ async def executeSQL(session: CommandSession):
         if session.ctx['sender']['user_id'] in session.bot.config.PROGRAMMERS:
             cursor.execute(session.current_arg)
             data = cursor.fetchone()
-            await session.send(data[0])
+            if data:
+                await session.send(data[0])
+    cursor.close()
     db.close()
 
