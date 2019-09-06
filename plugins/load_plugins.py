@@ -1,6 +1,6 @@
 import importlib
 import sys
-from nonebot import on_command, CommandSession, load_plugins, init
+from nonebot import on_command, CommandSession, load_plugins, get_bot
 import subprocess
 
 @on_command('reboot', only_to_me=False)
@@ -9,7 +9,7 @@ async def reboot(session: CommandSession):
         if session.ctx['sender']['user_id'] in session.bot.config.PROGRAMMERS:
             try:
                 subprocess.check_call(['git', 'pull' , session.bot.config.REPO])
-                init(importlib.reload(sys.modules['config']))
+                get_bot().config = importlib.reload(sys.modules['config'])
                 load_plugins('./plugins','plugins', True)
                 await session.send('更新成功')
             except subprocess.CalledProcessError:
