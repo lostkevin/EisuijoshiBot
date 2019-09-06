@@ -1,4 +1,4 @@
-from nonebot import on_notice, NoticeSession, get_bot, on_command, CommandSession
+from nonebot import on_notice, NoticeSession, get_bot, on_command, CommandSession, on_request, RequestSession
 
 @on_notice('group_increase')
 async def _(session: NoticeSession):
@@ -12,7 +12,11 @@ async def _(session: NoticeSession):
         return
     return
 
-@on_command('group', only_to_me=False)
+@on_request('group.invite')
+async def _(session: RequestSession):
+    await session.approve()
+
+@on_command('group', only_to_me=True)
 async def _(session: CommandSession):
     if session.ctx['sender']['user_id'] in session.bot.config.SUPERUSERS:
         session.bot.config.ALLOWED_GROUP.append(session.current_arg)
