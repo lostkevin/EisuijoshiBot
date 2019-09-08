@@ -7,9 +7,14 @@ async def get_stranger_info(*args) -> Any:
     return result
 
 async def send_private_msg(*args):
-    params = { 'user_id': int(args[0]), 'message': args[1]}
+    params = { 'user_id': int(args[0]), 'message': ' '.join(args[1:])}
     return await get_bot().call_action('send_private_msg', **params)
 
 async def set_group_leave(*args):
     params = {'group_id': int(args[0])}
     await get_bot().call_action('set_group_leave', **params)
+
+async def send_group_msg(*args):
+    params = {'group_id': int(args[0]), 'message': ' '.join(args[1:])}
+    await get_bot().call_action('send_group_msg', **params)
+
