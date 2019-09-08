@@ -1,5 +1,4 @@
 from nonebot import on_command, CommandSession
-import js2py
 import os
 import subprocess
 js = open('./plugins/discard.js', encoding='utf-8').read()
