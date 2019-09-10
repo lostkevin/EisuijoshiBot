@@ -14,7 +14,7 @@ async def _(session: CommandSession):
             except KeyError or ImportError:
                 Api = importlib.import_module("Api")
             if args[0] in dir(Api):
-                await eval("Api." + args[0])(*args[1:])
+                await eval("utils.Api." + args[0])(*args[1:])
             else:
                 await session.send("API:%s 不存在!" % args[0])
     except KeyError:
