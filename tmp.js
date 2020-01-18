@@ -755,4 +755,4 @@ function getResult(O) {
     return O
 }
 
-console.log(getResult("123550m443s1235p"))
+console.log(getResult("1234678m2445p445s"))
