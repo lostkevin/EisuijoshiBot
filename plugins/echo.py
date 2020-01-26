@@ -1,5 +1,5 @@
 from nonebot import on_command, CommandSession
-from EisuijoshiBot.plugins.utils.pictool import Parser
+from utils.Parser import Parser
 # on_command 装饰器将函数声明为一个命令处理器
 
 @on_command('echo', only_to_me=False)

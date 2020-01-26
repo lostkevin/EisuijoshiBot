@@ -12,7 +12,7 @@ async def _(session: CommandSession):
             try:
                 Api = importlib.reload(sys.modules['Api'])
             except KeyError or ImportError:
-                Api = importlib.import_module("Api")
+                Api = importlib.import_module("Api", 'utils')
             if args[0] in dir(Api):
                 await eval("utils.Api." + args[0])(*args[1:])
             else:

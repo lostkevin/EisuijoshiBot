@@ -2,53 +2,54 @@ from nonebot import on_command, CommandSession, scheduler, logger, get_bot
 import imghdr
 import aiofiles
 import aiohttp
-import re
+import ssl
 import  os.path
 import  random
 import shutil
-from EisuijoshiBot.plugins.utils.pictool import Parser
+import json
+from utils.Parser import Parser
 
 pic_pool = []
-pic_local = os.listdir('./Image')
+pic_dir = './data/Image/'
+pic_local = os.listdir(pic_dir)
 for i in range(0, 6):
     filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
     logger.info("successfully load %s into pool" % filename)
-    pic_pool.append("[CQ:image,file=file:///"+ os.path.abspath("./Image/" + filename) + "]")
+    pic_pool.append("[CQ:image,file=file:///"+ os.path.abspath(os.path.join(pic_dir, filename)) + "]")
 
-#@scheduler.scheduled_job('interval', seconds=4, max_instances=5)
+@scheduler.scheduled_job('interval', seconds=4, max_instances=5)
 async def fetch_pic(local = False):
     if local:
         for j in range(0, 6):
             filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
             logger.info("successfully load %s into pool" % filename)
-            pic_pool.append("[CQ:image,file=file:///" + os.path.abspath("./Image/" + filename) + "]")
+            pic_pool.append("[CQ:image,file=file:///" + os.path.abspath(os.path.join(pic_dir, filename)) + "]")
             return
-    if len(pic_pool) >= 20:
+    if len(pic_pool) >= 10:
         return
-    res = ""
-    async with aiohttp.request("GET", "https://api.lolicon.app/setu/view.php") as r:
-        response = await r.text(encoding="utf-8")
-        res = re.findall(r'src="(.*)"', response, re.M)
-    if len(res) == 0:
-        return
-    filename = res[0].split("/")
-    filename = filename[len(filename) - 1]
-    if not os.path.exists("./Image/" + filename):
-        async with aiohttp.request("GET", res[0]) as r:
-            img = await r.read()
-            async with aiofiles.open("./Image/" + filename, 'wb') as f:
-                await f.write(img)
-                f.close()
-                if imghdr.what("./Image/" + filename) is None:
-                    logger.info("download %s fail" % filename)
-                    return
-                pic_pool.append("[CQ:image,file=file:///"+ os.path.abspath("./Image/" + filename) + "]")
-                pic_local.append(filename)
-                logger.info("successfully download %s" % filename)
-    logger.info("successfully fetch a pic into pool")
+    async with aiohttp.request("GET", "https://api.lolicon.app/setu/") as r:
+        res = json.loads(await r.text(encoding="utf-8"))['data']
+    for data in res:
+        try:
+            async with aiohttp.request("GET", data['url']) as r:
+                filename = data['url'].split("/")[-1]
+                if not os.path.exists(pic_dir + filename):
+                    async with aiofiles.open(pic_dir + filename, 'wb') as f:
+                        img = await r.read()
+                        await f.write(img)
+                        f.close()
+                        if imghdr.what(pic_dir + filename) is None:
+                            logger.info("download %s fail" % filename)
+                            return
+                        pic_pool.append("[CQ:image,file=file:///" + os.path.abspath(pic_dir + filename) + "]")
+                        pic_local.append(filename)
+                        logger.info("successfully download %s" % filename)
+        except ssl.SSLError:
+            pass
+        logger.info("successfully fetch a pic into pool")
     return
 
-#@on_command('setu', only_to_me=False)
+@on_command('setu', only_to_me=False)
 async def _(session: CommandSession):
     if session.ctx["message_type"] == 'group' and session.ctx['sender']['role'] in [ 'admin' ]:
         if session.current_arg == 'on':
@@ -71,7 +72,7 @@ async def _(session: CommandSession):
     return
 
 
-#@on_command('upload', only_to_me=False)
+@on_command('upload', only_to_me=False)
 async def __(session: CommandSession):
     CQs = Parser(session.current_arg)
     cnt = 0
@@ -79,8 +80,8 @@ async def __(session: CommandSession):
         if cqc['CQ'] == "image":
             params = {'file':cqc['file']}
             filepath = await get_bot().call_action('get_image', **params)
-            shutil.copy(filepath['file'], './Image/' + params['file'])
-            pic_pool.append("[CQ:image,file=file:///" + os.path.abspath("./Image/" + params['file']) + "]")
+            shutil.copy(filepath['file'], pic_dir + params['file'])
+            pic_pool.append("[CQ:image,file=file:///" + os.path.abspath(pic_dir + params['file']) + "]")
             pic_local.append(params['file'])
             logger.info("successfully upload %s" % cqc['file'])
             cnt += 1
