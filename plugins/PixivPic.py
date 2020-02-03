@@ -16,7 +16,8 @@ if len(pic_local) > 6:
     for i in range(0, 6):
         filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
         logger.info("successfully load %s into pool" % filename)
-        pic_pool.append("[CQ:image,file=file:///"+ os.path.abspath(os.path.join(pic_dir, filename)) + "]")
+        p = os.path.abspath(os.path.join(pic_dir, filename))
+        pic_pool.append("[CQ:image,file=file://"+ "" if p.startswith('/') else "/" + p + "]")
 
 @scheduler.scheduled_job('interval', seconds=4, max_instances=5)
 async def fetch_pic(local = False):
@@ -24,7 +25,8 @@ async def fetch_pic(local = False):
         for j in range(0, 6):
             filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
             logger.info("successfully load %s into pool" % filename)
-            pic_pool.append("[CQ:image,file=file:///" + os.path.abspath(os.path.join(pic_dir, filename)) + "]")
+            p = os.path.abspath(os.path.join(pic_dir, filename))
+            pic_pool.append("[CQ:image,file=file://" + "" if p.startswith('/') else "/" + p + "]")
             return
     if len(pic_pool) >= 10:
         return
@@ -42,7 +44,8 @@ async def fetch_pic(local = False):
                         if imghdr.what(pic_dir + filename) is None:
                             logger.info("download %s fail" % filename)
                             return
-                        pic_pool.append("[CQ:image,file=file:///" + os.path.abspath(pic_dir + filename) + "]")
+                        p = os.path.abspath(os.path.join(pic_dir, filename))
+                        pic_pool.append("[CQ:image,file=file://" + "" if p.startswith('/') else "/" + p + "]")
                         pic_local.append(filename)
                         logger.info("successfully download %s" % filename)
         except ssl.SSLError:
@@ -82,7 +85,8 @@ async def __(session: CommandSession):
             params = {'file':cqc['file']}
             filepath = await get_bot().call_action('get_image', **params)
             shutil.copy(filepath['file'], pic_dir + params['file'])
-            pic_pool.append("[CQ:image,file=file:///" + os.path.abspath(pic_dir + params['file']) + "]")
+            p =  os.path.abspath(pic_dir + params['file'])
+            pic_pool.append("[CQ:image,file=file://" + "" if p.startswith('/') else "/" + p + "]")
             pic_local.append(params['file'])
             logger.info("successfully upload %s" % cqc['file'])
             cnt += 1
