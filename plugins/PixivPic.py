@@ -17,7 +17,7 @@ if len(pic_local) > 6:
         filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
         logger.info("successfully load %s into pool" % filename)
         p = os.path.abspath(os.path.join(pic_dir, filename))
-        pic_pool.append("[CQ:image,file=file://"+ "" if p.startswith('/') else "/" + p + "]")
+        pic_pool.append("[CQ:image,file=file://"+ ("" if p.startswith('/') else "/") + p + "]")
 
 @scheduler.scheduled_job('interval', seconds=4, max_instances=5)
 async def fetch_pic(local = False):
@@ -26,7 +26,7 @@ async def fetch_pic(local = False):
             filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
             logger.info("successfully load %s into pool" % filename)
             p = os.path.abspath(os.path.join(pic_dir, filename))
-            pic_pool.append("[CQ:image,file=file://" + "" if p.startswith('/') else "/" + p + "]")
+            pic_pool.append("[CQ:image,file=file://" + ("" if p.startswith('/') else "/") + p + "]")
             return
     if len(pic_pool) >= 10:
         return
@@ -45,7 +45,7 @@ async def fetch_pic(local = False):
                             logger.info("download %s fail" % filename)
                             return
                         p = os.path.abspath(os.path.join(pic_dir, filename))
-                        pic_pool.append("[CQ:image,file=file://" + "" if p.startswith('/') else "/" + p + "]")
+                        pic_pool.append("[CQ:image,file=file://" + ("" if p.startswith('/') else "/") + p + "]")
                         pic_local.append(filename)
                         logger.info("successfully download %s" % filename)
         except ssl.SSLError:
