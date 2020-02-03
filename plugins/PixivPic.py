@@ -13,10 +13,10 @@ pic_pool = []
 pic_dir = './data/Image/'
 pic_local = os.listdir(pic_dir)
 if len(pic_local) > 6:
-for i in range(0, 6):
-    filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
-    logger.info("successfully load %s into pool" % filename)
-    pic_pool.append("[CQ:image,file=file:///"+ os.path.abspath(os.path.join(pic_dir, filename)) + "]")
+    for i in range(0, 6):
+        filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
+        logger.info("successfully load %s into pool" % filename)
+        pic_pool.append("[CQ:image,file=file:///"+ os.path.abspath(os.path.join(pic_dir, filename)) + "]")
 
 @scheduler.scheduled_job('interval', seconds=4, max_instances=5)
 async def fetch_pic(local = False):
