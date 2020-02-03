@@ -12,6 +12,7 @@ from utils.Parser import Parser
 pic_pool = []
 pic_dir = './data/Image/'
 pic_local = os.listdir(pic_dir)
+if len(pic_local) > 6:
 for i in range(0, 6):
     filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
     logger.info("successfully load %s into pool" % filename)

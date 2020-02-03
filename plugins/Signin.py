@@ -1,21 +1,21 @@
 from nonebot import CommandSession, on_command
 
-@on_command('½½Ë®')
+@on_command('æµ‡æ°´')
 async def _watering(session: CommandSession):
     pass
 
-@on_command('²Î°İ')
+@on_command('å‚æ‹œ')
 async def _visit(session: CommandSession):
     pass
 
-@on_command(['ºÃ¸Ğ¶È', 'ÆõÔ¼'])
+@on_command(['å¥½æ„Ÿåº¦', 'å¥‘çº¦'])
 async def _query(session: CommandSession):
     pass
 
-@on_command('³É³¤Öµ')
+@on_command('æˆé•¿å€¼')
 async def _growth(session: CommandSession):
     pass
 
-@on_command('ÉùÍû')
+@on_command('å£°æœ›')
 async def _fame(session: CommandSession):
     pass
