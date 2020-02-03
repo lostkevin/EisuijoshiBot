@@ -8,7 +8,7 @@ async def _watering(session: CommandSession):
 async def _visit(session: CommandSession):
     pass
 
-@on_command(['好感度', '契约'])
+@on_command(('好感度', '契约'))
 async def _query(session: CommandSession):
     pass
 
