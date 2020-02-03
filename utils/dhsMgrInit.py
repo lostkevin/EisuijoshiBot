@@ -10,7 +10,7 @@ async def init():
             await asyncio.sleep(60)
     if not hasattr(get_bot().config, 'mgr'):
         get_bot().config.mgr = dhs.DHSMgr()
-        with open('.\data\key.json') as f:
+        with open('./data/key.json') as f:
             User = json.load(f)
         asyncio.create_task(get_bot().config.mgr.run())
         await get_bot().config.mgr.login(User['user'], User['passwd'])

@@ -9,8 +9,6 @@
     + 下载[Release](https://github.com/richardchien/coolq-http-api/releases)并复制到数据目录内的app文件夹下
     + 安装[语音插件](https://dlcq.cqp.me/cq/cqc_1.0.1.zip)
     + 首次登录后编辑data\app\io.github.richardchien.coolqhttpapi(或app\io.github.richardchien.coolqhttpapi)下的配置文件,格式见开发文档,一个示例配置见下
-+ [nonebot](https://github.com/richardchien/nonebot)
-    + 为支持重启功能,用modified_lib/下的plugin.py覆盖nonebot内的plugin.py
 + mySQL + python connector
     + pip install pymysql
 
