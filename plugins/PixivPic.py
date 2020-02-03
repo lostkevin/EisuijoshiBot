@@ -29,8 +29,8 @@ if len(pic_local) > 6:
         logger.info("successfully load %s into pool" % filename)
         if filename in pic_data.keys():
             pic_pool.append(_toCQImg(filename) + \
-                            '\nPID:' + pic_data[filename]['pid'] + \
-                            '\nUID:' + pic_data[filename]['uid'])
+                            '\nPID:' + str(pic_data[filename]['pid']) + \
+                            '\nUID:' + str(pic_data[filename]['uid']))
         else:
             pic_pool.append(_toCQImg(filename))
 
@@ -48,8 +48,8 @@ async def fetch_pic(local = False):
             filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
             if filename in pic_data.keys():
                 pic_pool.append(_toCQImg(filename) + \
-                                '\nPID:' + pic_data[filename]['pid'] + \
-                                '\nUID:' + pic_data[filename]['uid'])
+                                '\nPID:' + str(pic_data[filename]['pid']) + \
+                                '\nUID:' + str(pic_data[filename]['uid']))
             else:
                 pic_pool.append(_toCQImg(filename))
             logger.info("successfully load %s into pool" % filename)
@@ -72,8 +72,8 @@ async def fetch_pic(local = False):
                             logger.info("download %s fail" % filename)
                             return
                         pic_pool.append(_toCQImg(filename) + \
-                                        '\nPID:' + data['pid'] + \
-                                        '\nUID:' + data['uid'])
+                                        '\nPID:' + str(data['pid']) + \
+                                        '\nUID:' + str(data['uid']))
                         pic_local.append(filename)
                         logger.info("successfully download %s" % filename)
         except ssl.SSLError:
