@@ -3,30 +3,56 @@ import imghdr
 import aiofiles
 import aiohttp
 import ssl
-import  os.path
-import  random
+import os.path
+import random
 import shutil
 import json
 from utils.Parser import Parser
 
+def _toCQImg(filename: str)->str:
+    p = os.path.abspath(os.path.join(pic_dir, filename))
+    return "[CQ:image,file=file:///"+ ("Z:/" if p.startswith('/') else "") + p + "]"
+
 pic_pool = []
 pic_dir = './data/Image/'
 pic_local = os.listdir(pic_dir)
+if os.path.exists('./data/imgData.json'):
+    with open('./data/imgData.json') as f:
+        pic_data = json.load(f)
+        f.close()
+else:
+    pic_data = {}
+
 if len(pic_local) > 6:
     for i in range(0, 6):
         filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
         logger.info("successfully load %s into pool" % filename)
-        p = os.path.abspath(os.path.join(pic_dir, filename))
-        pic_pool.append("[CQ:image,file=file:///"+ ("Z:/" if p.startswith('/') else "") + p + "]")
+        if filename in pic_data.keys():
+            pic_pool.append(_toCQImg(filename) + \
+                            '\nPID:' + pic_data[filename]['pid'] + \
+                            '\nUID:' + pic_data[filename]['uid'])
+        else:
+            pic_pool.append(_toCQImg(filename))
+
+@scheduler.scheduled_job('interval', seconds=30, max_instances=1)
+async def save_imgData():
+    with open('./data/imgData.json', 'w') as f:
+        json.dump(pic_data, f)
+        f.close()
+
 
 @scheduler.scheduled_job('interval', seconds=4, max_instances=5)
 async def fetch_pic(local = False):
     if local:
         for j in range(0, 6):
             filename = pic_local.pop(random.randint(0, len(pic_local) - 1))
+            if filename in pic_data.keys():
+                pic_pool.append(_toCQImg(filename) + \
+                                '\nPID:' + pic_data[filename]['pid'] + \
+                                '\nUID:' + pic_data[filename]['uid'])
+            else:
+                pic_pool.append(_toCQImg(filename))
             logger.info("successfully load %s into pool" % filename)
-            p = os.path.abspath(os.path.join(pic_dir, filename))
-            pic_pool.append("[CQ:image,file=file:///" + ("Z:/" if p.startswith('/') else "") + p + "]")
             return
     if len(pic_pool) >= 10:
         return
@@ -37,6 +63,7 @@ async def fetch_pic(local = False):
             async with aiohttp.request("GET", data['url']) as r:
                 filename = data['url'].split("/")[-1]
                 if not os.path.exists(pic_dir + filename):
+                    pic_data[filename] = {'pid': data['pid'], 'uid': data['uid']}
                     async with aiofiles.open(pic_dir + filename, 'wb') as f:
                         img = await r.read()
                         await f.write(img)
@@ -44,8 +71,9 @@ async def fetch_pic(local = False):
                         if imghdr.what(pic_dir + filename) is None:
                             logger.info("download %s fail" % filename)
                             return
-                        p = os.path.abspath(os.path.join(pic_dir, filename))
-                        pic_pool.append("[CQ:image,file=file:///" + ("Z:/" if p.startswith('/') else "") + p + "]")
+                        pic_pool.append(_toCQImg(filename) + \
+                                        '\nPID:' + data['pid'] + \
+                                        '\nUID:' + data['uid'])
                         pic_local.append(filename)
                         logger.info("successfully download %s" % filename)
         except ssl.SSLError:
@@ -85,8 +113,7 @@ async def __(session: CommandSession):
             params = {'file':cqc['file']}
             filepath = await get_bot().call_action('get_image', **params)
             shutil.copy(filepath['file'], pic_dir + params['file'])
-            p =  os.path.abspath(pic_dir + params['file'])
-            pic_pool.append("[CQ:image,file=file:///" + ("Z:/" if p.startswith('/') else "") + p + "]")
+            pic_pool.append(_toCQImg(params['file']))
             pic_local.append(params['file'])
             logger.info("successfully upload %s" % cqc['file'])
             cnt += 1
