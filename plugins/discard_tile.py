@@ -87,9 +87,13 @@ def translateIntoMsg(res : dict) -> str:
         chance = ''
         for i in tiles:
             chance += TilesConverter.to_one_line_string([i])
-        Msg[len(res[k])] = '打%s 摸[' % name +  chance + ' %d枚]' % len(res[k])
+        if len(res[k]) in Msg.keys():
+            Msg[len(res[k])].append('打%s 摸[' % name +  chance + ' %d枚]' % len(res[k]))
+        else:
+            Msg[len(res[k])] = ['打%s 摸[' % name + chance + ' %d枚]' % len(res[k])]
     keys = sorted(Msg, reverse=True)
 
     for k in keys:
-        finalStr += '\n' + Msg[k]
+        for item in Msg[k]:
+            finalStr += '\n' + item
     return finalStr
