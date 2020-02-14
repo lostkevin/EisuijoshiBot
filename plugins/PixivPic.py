@@ -94,6 +94,10 @@ async def _(session: CommandSession):
                 session.bot.config.SETU_BAN.add(session.ctx['group_id'])
             await session.send("功能已关闭!")
             return
+
+    if session.current_arg == 'status':
+        await session.send("当前状态: %s" % ("开启" if session.ctx['group_id'] not in session.bot.config.SETU_BAN else "关闭"))
+        return
     if session.ctx["message_type"] =='group' and session.ctx['group_id'] in session.bot.config.SETU_BAN:
         return
     if len(session.current_arg) > 0:
