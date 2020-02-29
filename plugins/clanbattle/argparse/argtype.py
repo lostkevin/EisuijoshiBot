@@ -21,11 +21,11 @@ def damage_int(x:str) -> int:
 
 def boss_code(x:str) -> int:
     x = util.normalize_str(x)
-    m = _rex1_bcode.match(x)
-    if m > 0:
-        return int(m.group(1))
-    elif m := _rex2_bcode.match(x):
-        return '零一二三四五'.find(m.group(1))
+    m = [_rex1_bcode.match(x), _rex2_bcode.match(x)]
+    if m[0]:
+        return int(m[0].group(1))
+    elif m[1]:
+        return '零一二三四五'.find(m[1].group(1))
     raise ParseError('Boss编号不合法 应为1-5的整数')
 
 
