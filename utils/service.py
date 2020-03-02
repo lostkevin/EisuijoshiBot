@@ -1,13 +1,13 @@
 import os
 import re
 import sys
-import logging
 import json
 from functools import wraps
 from collections import defaultdict
 from typing import Iterable, Optional, Callable, Union, NamedTuple, Set
 
-import nonebot
+import nonebot, logging
+from nonebot import logger
 from nonebot.command import _FinishException, _PauseException, SwitchException
 
 from . import util
@@ -103,15 +103,12 @@ class Service:
         self.disable_group = set(config['disable_group'])
 
         formatter = logging.Formatter('[%(asctime)s %(name)s] %(levelname)s: %(message)s')
-        self.logger = logging.getLogger(name)
-        self.logger.setLevel(logging.DEBUG if self.bot.config.DEBUG else logging.INFO)
+        self.logger = logger
         default_handler = logging.StreamHandler(sys.stdout)
         default_handler.setFormatter(formatter)
         error_handler = logging.FileHandler(_error_log_file, encoding='utf8')
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(formatter)
-        self.logger.addHandler(default_handler)
-        self.logger.addHandler(error_handler)
 
         _loaded_services.add(self)
 
@@ -291,23 +288,6 @@ class Service:
             return nonebot.on_command(name, **kwargs)(wrapper)
         return deco
 
-
-    def on_natural_language(self, keywords=None, **kwargs):
-        def deco(func):
-            @wraps(func)
-            async def wrapper(session:nonebot.NLPSession):
-                if await self.check_permission(session.ctx):
-                    try:
-                        await func(session)
-                        self.logger.info(f'Message {session.ctx["message_id"]} is handled as natural language by {func.__name__}.')
-                    except Exception as e:
-                        self.logger.exception(e)
-                        self.logger.error(f'{type(e)} occured when {func.__name__} handling message {session.ctx["message_id"]}.')
-                    return
-            return nonebot.on_natural_language(keywords, **kwargs)(wrapper)
-        return deco
-
-
     def scheduled_job(self, *args, **kwargs):
         kwargs.setdefault('misfire_grace_time', 60)
         kwargs.setdefault('coalesce', True)
@@ -323,3 +303,5 @@ class Service:
                     self.logger.error(f'{type(e)} occured when doing scheduled job {func.__name__}.')
             return nonebot.scheduler.scheduled_job(*args, **kwargs)(wrapper)
         return deco
+
+

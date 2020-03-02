@@ -3,13 +3,13 @@
 
 import re
 from typing import Callable, Dict, Tuple, Iterable
-
-from nonebot import NoneBot
+import importlib
+import sys
+from nonebot import NoneBot, get_bot
 from utils import util
 from utils.service import Service, Privilege
-from .argparse import ArgParser
+from .argparse import ArgParser, ParseResult
 from .exception import *
-
 sv = Service('clanbattle', manage_priv=Privilege.SUPERUSER, enable_on_default=True)
 SORRY = 'ごめんなさい！嘤嘤嘤(〒︿〒)'
 
@@ -34,7 +34,8 @@ async def _clanbattle_bus(bot:NoneBot, ctx, match):
             await bot.send(ctx, f'Error: 机器人出现未预料的错误\n{SORRY}\n※请及时联系维护组', at_sender=True)
 
 def cb_clean():
-    _registry.clear()
+    #_registry.clear()
+    get_bot().unsubscribe('message.group', _clanbattle_bus)
 
 def cb_cmd(name, parser:ArgParser) -> Callable:
     if isinstance(name, str):
@@ -52,8 +53,11 @@ def cb_cmd(name, parser:ArgParser) -> Callable:
     return deco
 
 
-from .cmdv2 import *
 
+try:
+    importlib.reload(sys.modules['plugins.clanbattle.cmdv2'])
+except KeyError:
+    importlib.import_module('plugins.clanbattle.cmdv2')
 
 @cb_cmd('帮助', ArgParser('!帮助'))
 async def cb_help(bot:NoneBot, ctx, args:ParseResult):
