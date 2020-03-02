@@ -8,10 +8,10 @@ async def reboot(session: CommandSession):
     if hasattr(session.bot.config, 'PROGRAMMERS'):
         if session.ctx['sender']['user_id'] in session.bot.config.PROGRAMMERS:
             try:
+                plugins.clanbattle.cb_clean()
                 scheduler.remove_all_jobs()
                 subprocess.check_call(['git', 'pull' , session.bot.config.REPO])
                 get_bot().config = importlib.reload(sys.modules['config'])
-                plugins.clanbattle._registry = {}
                 load_plugins('./plugins','plugins', True)
                 await session.send('更新成功')
             except subprocess.CalledProcessError:

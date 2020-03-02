@@ -15,7 +15,7 @@ SORRY = 'ごめんなさい！嘤嘤嘤(〒︿〒)'
 
 _registry:Dict[str, Tuple[Callable, ArgParser]] = {}
 
-@sv.on_rex(re.compile(r'^[!！](.+)', re.DOTALL), event='group')
+@sv.on_rex(re.compile(r'^[?？](.+)', re.DOTALL), event='group')
 async def _clanbattle_bus(bot:NoneBot, ctx, match):
     cmd, *args = match.group(1).split()
     cmd = util.normalize_str(cmd)
@@ -33,6 +33,8 @@ async def _clanbattle_bus(bot:NoneBot, ctx, match):
             sv.logger.error(f'{type(e)} occured when {func.__name__} handling message {ctx["message_id"]}.')
             await bot.send(ctx, f'Error: 机器人出现未预料的错误\n{SORRY}\n※请及时联系维护组', at_sender=True)
 
+def cb_clean():
+    _registry.clear()
 
 def cb_cmd(name, parser:ArgParser) -> Callable:
     if isinstance(name, str):
