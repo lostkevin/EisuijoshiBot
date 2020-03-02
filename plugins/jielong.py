@@ -64,10 +64,16 @@ def image_merge(images):
             y += height
     return new_img
   
+@on_command('接龙公屏')
+async def _(session: CommandSession):
+    if session.ctx['sender']['user_id'] in session.bot.config.SUPERUSERS:
+        session.bot.config.jielongState = True if session.current_arg == '关闭' else False
 
-@on_command('接龙', only_to_me=True)
-async def _(commandSession: CommandSession):
-    x = trans_text_tolist(commandSession.current_arg)
+@on_command('接龙', only_to_me=False)
+async def _(session: CommandSession):
+    if hasattr(session.bot.config, 'jielongState') and session.bot.config.jielongState:
+        return
+    x = trans_text_tolist(session.current_arg)
     imgs = []
     for i in x:
         imgs.append(get_single_icon(i))
@@ -76,7 +82,7 @@ async def _(commandSession: CommandSession):
         mkdir('./data/tmp')
     result.save(path.join("./data/tmp", "jielong.png"))
     p = path.abspath(path.join("./data/tmp", "jielong.png"))
-    await commandSession.send("[CQ:image,file=file:///" + ("Z:/" if p.startswith('/') else "") + p + "]")
+    await session.send("[CQ:image,file=file:///" + ("Z:/" if p.startswith('/') else "") + p + "]")
     return
 
 
