@@ -10,7 +10,7 @@ async def reboot(session: CommandSession):
             try:
                 scheduler.remove_all_jobs()
                 plugins.clanbattle.cb_clean()
-                # subprocess.check_call(['git', 'pull' , session.bot.config.REPO])
+                subprocess.check_call(['git', 'pull' , session.bot.config.REPO])
                 get_bot().config = importlib.reload(sys.modules['config'])
                 load_plugins('./plugins','plugins', True)
                 await session.send('更新成功')
