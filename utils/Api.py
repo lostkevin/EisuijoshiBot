@@ -1,6 +1,6 @@
 from nonebot import get_bot
 from typing import  Any
-
+from aiocqhttp.exceptions import ActionFailed
 async def get_stranger_info(*args) -> Any:
     params = { 'user_id':int(args[0]) }
     result = await get_bot().call_action('get_stranger_info', **params)
@@ -24,3 +24,10 @@ async def send_local_pic():
 async def get_image(filename: str) -> str:
     params = {'file':filename}
     return await  get_bot().call_action('get_image', **params )
+
+async def get_group_member_list(groupID: int):
+    params = {'group_id':groupID}
+    try:
+        return await get_bot().call_action('get_group_member_list', **params)
+    except ActionFailed as r:
+        print(r)

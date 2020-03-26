@@ -106,3 +106,4 @@ venv.bak/
 # others
 data/*
 .idea
+./plugins/PixivPic.py
