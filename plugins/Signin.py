@@ -59,15 +59,17 @@ async def _query(session: CommandSession):
         rank = 1
         liking = r[1][0][2]
         c_tuple = None
+        count = 1
         for i in r[1]:
             if i[0] not in p_l:
                 continue
             if liking > i[2]:
-                rank += 1
+                rank = count
                 liking = i[2]
             f_list.append((rank, p_l[i[0]], *i)) #有记录
             if i[0] == session.ctx['user_id']:
                 c_tuple = (rank, p_l[i[0]], *i)
+            count += 1
         if len(f_list) > 10:
             f_list = f_list[0:9]
         if c_tuple:
@@ -99,15 +101,17 @@ async def _growth(session: CommandSession):
         rank = 1
         liking = r[2][0][1]
         c_tuple = None
+        count = 1
         for i in r[2]:
             if i[0] not in p_l:
                 continue
             if liking > i[1]:
-                rank += 1
+                rank = count
                 liking = i[1]
             f_list.append((rank, p_l[i[0]], *i))  # 有记录
             if i[0] == session.ctx['user_id']:
                 c_tuple = (rank, p_l[i[0]], *i)
+            count += 1
         if len(f_list) > 10:
             f_list = f_list[0:9]
         if c_tuple:
