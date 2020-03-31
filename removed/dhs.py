@@ -4,7 +4,8 @@ import asyncio
 import websockets
 from google.protobuf import reflection
 from protobuf_to_dict import protobuf_to_dict, dict_to_protobuf
-from . import dhs_pb2
+from removed import dhs_pb2
+
 
 class DHSMgr:
     _msgType = {'notify': b'\x01', 'req': b'\x02', 'res': b'\x03'}

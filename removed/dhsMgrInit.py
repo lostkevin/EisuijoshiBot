@@ -1,6 +1,6 @@
 import json
 import asyncio
-from utils import dhs
+from removed import dhs
 from nonebot import get_bot
 
 async def init():

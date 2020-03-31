@@ -1,4 +1,4 @@
-from .listm import *
+from removed.listm import *
 import numpy as np
 
 same = ['ㄓ', 'ㄔ', 'ㄕ', 'ㄖ', 'ㄗ', 'ㄘ', 'ㄙ']

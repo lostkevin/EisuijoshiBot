@@ -1,8 +1,8 @@
 from pypinyin import lazy_pinyin, Style
-from utils.listm import yuntop,ptoyun,listma,idicon
+from removed.listm import yuntop,ptoyun,listma,idicon
 from nonebot import CommandSession, on_command
 from os import path, mkdir
-from utils.JielongSearch import choiceEval
+from removed.JielongSearch import choiceEval
 yuntoicron = {}
 same = ['jh','ch','sh','r','z','c','s']
 same3 = ['ㄓ', 'ㄔ', 'ㄕ', 'ㄖ', 'ㄗ', 'ㄘ', 'ㄙ']
