@@ -1,6 +1,6 @@
 import nonebot
 import importlib
-from utils.dhsMgrInit import init
+from removed.dhsMgrInit import init
 
 if __name__ == '__main__':
     nonebot.init(importlib.import_module('config'))
