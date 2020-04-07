@@ -13,8 +13,7 @@ import os
 from datetime import datetime, timedelta
 from typing import List
 from matplotlib import pyplot as plt
-plt.rcParams['font.sans-serif']=['AR PL UKai CN'] #用来正常显示中文标签
-plt.rcParams['font.family']='AR PL UKai CN'
+
 import matplotlib
 matplotlib.use('AGG')
 try:
@@ -35,8 +34,8 @@ from .battlemaster import BattleMaster
 from .exception import *
 
 plt.style.use('seaborn-pastel')
-plt.rcParams['font.family'] = ['Microsoft YaHei']
-
+plt.rcParams['font.sans-serif']=['AR PL UKai CN'] #用来正常显示中文标签
+plt.rcParams['font.family']='AR PL UKai CN'
 USAGE_ADD_CLAN = '!建会 N<公会名> S<服务器地区>'
 USAGE_ADD_MEMBER = '!入会 (<昵称>) (@<qq号>)'
 USAGE_LIST_MEMBER = '!查看成员'
