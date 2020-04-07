@@ -33,4 +33,3 @@
 
 ※详细说明见命令一览表：github.com/Ice-Cirno/HoshinoBot/tree/master/hoshino/modules/priconne/clanbattle
 ※使用前请【逐字】阅读必读事项'''
-from . import  clanbattle
