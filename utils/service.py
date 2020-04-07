@@ -248,6 +248,7 @@ class Service:
         if isinstance(rex, str):
             rex = re.compile(rex)
         def deco(func):
+            self.logger.info('click')
             @wraps(func)
             async def wrapper(ctx):
                 if await self.check_permission(ctx):
