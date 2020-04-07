@@ -63,6 +63,7 @@ def cb_cmd(name, parser:ArgParser) -> Callable:
 
 def cb_clean():
     #_registry.clear()
+    print(get_bot()._bus)
     get_bot().unsubscribe('message.group', _clanbattle_bus)
 
 try:
