@@ -1,15 +1,14 @@
 import importlib
-import sys
 from nonebot import on_command, CommandSession, load_plugins, get_bot, scheduler
 import subprocess
-from .clanbattle import cb_clean
+import sys
 @on_command('reboot', only_to_me=False)
 async def reboot(session: CommandSession):
     if hasattr(session.bot.config, 'PROGRAMMERS'):
         if session.ctx['sender']['user_id'] in session.bot.config.PROGRAMMERS:
             try:
                 scheduler.remove_all_jobs()
-                cb_clean()
+                sys.modules['plugins.clanbattle'].cb_clean()
                 subprocess.check_call(['git', 'pull' , session.bot.config.REPO])
                 get_bot().config = importlib.reload(sys.modules['config'])
                 load_plugins('./plugins','plugins', True)
