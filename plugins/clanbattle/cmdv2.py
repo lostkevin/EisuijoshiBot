@@ -34,35 +34,9 @@ from .battlemaster import BattleMaster
 from .exception import *
 
 plt.style.use('seaborn-pastel')
-plt.rcParams['font.sans-serif']=['Noto Sans CJK TC,Noto Sans CJK TC Medium',
-'Noto Serif CJK KR,Noto Serif CJK KR Black',
-'Noto Serif CJK TC,Noto Serif CJK TC ExtraLight',
-'Noto Sans CJK TC,Noto Sans CJK TC DemiLight',
-'Noto Sans CJK KR,Noto Sans CJK KR Black',
-'Noto Serif CJK JP,Noto Serif CJK JP Light',
-'Noto Sans CJK TC,Noto Sans CJK TC Black',
-'Noto Serif CJK KR,Noto Serif CJK KR Medium',
-'Noto Sans CJK SC,Noto Sans CJK SC Light',
-'Noto Serif CJK SC,Noto Serif CJK SC ExtraLight',
-'Noto Sans CJK HK,Noto Sans CJK HK Black',
-'Noto Sans CJK HK,Noto Sans CJK HK Medium',
-'DejaVu Sans Mono',
-'Noto Serif CJK JP',
-'Noto Serif CJK KR',
-'Noto Serif CJK TC,Noto Serif CJK TC Black',
-'AR PL UKai TW MBE',
-'Noto Sans CJK JP,Noto Sans CJK JP Light',
-'Noto Sans CJK SC,Noto Sans CJK SC Medium',
-'Noto Serif CJK SC',
-'Noto Serif CJK TC',
-'Noto Serif CJK JP,Noto Serif CJK JP ExtraLight',
-'Noto Sans Mono CJK SC',
-'Noto Sans Mono CJK TC',
-'Noto Sans Mono CJK JP',
-'Noto Sans Mono CJK HK',
-'Noto Sans Mono CJK KR',
-'Noto Sans CJK HK',
-'DejaVu Serif'] #用来正常显示中文标签
+plt.rcParams['font.sans-serif'] = ["AR PL UKai CN"]
+plt.rcParams['axes.unicode_minus'] = False
+
 USAGE_ADD_CLAN = '!建会 N<公会名> S<服务器地区>'
 USAGE_ADD_MEMBER = '!入会 (<昵称>) (@<qq号>)'
 USAGE_LIST_MEMBER = '!查看成员'
