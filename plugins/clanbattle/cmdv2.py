@@ -107,7 +107,8 @@ async def list_member(bot:NoneBot, ctx:Context_T, args:ParseResult):
     bm = BattleMaster(ctx['group_id'])
     clan = _check_clan(bm)
     mems = bm.list_member(1)
-    if l := len(mems):
+    l = len(mems)
+    if l :
         # 数字太多会被腾讯ban
         mems = map(lambda x: '{uid: <11,d} | {name}'.format_map(x), mems)
         msg = [ f"\n{clan['name']}   {l}/30 人\n____ QQ ____ | 昵称", *mems]
