@@ -13,6 +13,8 @@ import os
 from datetime import datetime, timedelta
 from typing import List
 from matplotlib import pyplot as plt
+plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
 import matplotlib
 matplotlib.use('AGG')
 try:
