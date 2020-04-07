@@ -6,10 +6,11 @@ from typing import Callable, Dict, Tuple, Iterable
 
 import unicodedata
 import zhconv
-
-from nonebot import NoneBot
+import importlib
+import sys
+from nonebot import NoneBot, get_bot
 from utils.service import Service, Privilege
-from .argparse import ArgParser
+from .argparse import ArgParser, ParseResult
 from .exception import *
 
 sv = Service('clanbattle', manage_priv=Privilege.SUPERUSER, enable_on_default=True)
@@ -26,7 +27,7 @@ def normalize_str(string) -> str:
     string = zhconv.convert(string, 'zh-hans')
     return string
 
-@sv.on_rex(re.compile(r'^[!！](.+)', re.DOTALL), event='group')
+@sv.on_rex(re.compile(r'^[?？!！](.+)', re.DOTALL), event='group')
 async def _clanbattle_bus(bot:NoneBot, ctx, match):
     cmd, *args = match.group(1).split()
     cmd = normalize_str(cmd)
@@ -60,9 +61,14 @@ def cb_cmd(name, parser:ArgParser) -> Callable:
         return func
     return deco
 
+def cb_clean():
+    #_registry.clear()
+    get_bot().unsubscribe('message.group', _clanbattle_bus)
 
-from .cmdv2 import *
-
+try:
+    importlib.reload(sys.modules['plugins.clanbattle.cmdv2'])
+except KeyError:
+    importlib.import_module('plugins.clanbattle.cmdv2')
 
 @cb_cmd('帮助', ArgParser('!帮助'))
 async def cb_help(bot:NoneBot, ctx, args:ParseResult):

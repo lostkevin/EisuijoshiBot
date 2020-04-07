@@ -26,9 +26,9 @@ from .battlemaster import BattleMaster
 from .exception import *
 
 
-USAGE_ADD_CLAN = '!建会 N<公会名> S<服务器地区>'
-USAGE_ADD_MEMBER = '!入会 N<昵称> (Q<qq号>)'
-USAGE_LIST_MEMBER = '!查看成员'
+USAGE_ADD_CLAN = '?建会 N<公会名> S<服务器地区>'
+USAGE_ADD_MEMBER = '?入会 N<昵称> (Q<qq号>)'
+USAGE_LIST_MEMBER = '?查看成员'
 
 ERROR_CLAN_NOTFOUND = f'公会未初始化：请*群管理*使用【{USAGE_ADD_CLAN}】进行初始化'
 ERROR_ZERO_MEMBER = f'公会内无成员：使用【{USAGE_ADD_MEMBER}】以添加'
