@@ -1,6 +1,6 @@
 import re
 
-from utils import util
+from .. import normalize_str
 from ..exception import ParseError
 from ..battlemaster import BattleMaster
 
@@ -11,9 +11,8 @@ _rex2_bcode = re.compile(r'^老?([一二三四五])王?$')
 _rex_rcode = re.compile(r'^[1-9]\d{0,2}$')
 
 def damage_int(x:str) -> int:
-    x = util.normalize_str(x)
-    m = _rex_dint.match(x)
-    if m:
+    x = normalize_str(x)
+    if m := _rex_dint.match(x):
         x = int(m.group(1)) * _unit_rate[m.group(2).lower()]
         if x < 100000000:
             return x
@@ -21,24 +20,23 @@ def damage_int(x:str) -> int:
 
 
 def boss_code(x:str) -> int:
-    x = util.normalize_str(x)
-    m = [_rex1_bcode.match(x), _rex2_bcode.match(x)]
-    if m[0]:
-        return int(m[0].group(1))
-    elif m[1]:
-        return '零一二三四五'.find(m[1].group(1))
+    x = normalize_str(x)
+    if m := _rex1_bcode.match(x):
+        return int(m.group(1))
+    elif m := _rex2_bcode.match(x):
+        return '零一二三四五'.find(m.group(1))
     raise ParseError('Boss编号不合法 应为1-5的整数')
 
 
 def round_code(x:str) -> int:
-    x = util.normalize_str(x)
+    x = normalize_str(x)
     if _rex_rcode.match(x):
         return int(x)
     raise ParseError('周目数不合法 应为不大于999的非负整数')
 
 
 def server_code(x:str) -> int:
-    x = util.normalize_str(x)
+    x = normalize_str(x)
     if x in ('jp', '日', '日服'):
         return BattleMaster.SERVER_JP
     elif x in ('tw', '台', '台服'):

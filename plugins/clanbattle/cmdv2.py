@@ -10,7 +10,7 @@ PCR会战管理命令 v2
 """
 
 import os
-import json as json
+import json
 from datetime import datetime
 from typing import List
 
@@ -107,8 +107,7 @@ async def list_member(bot:NoneBot, ctx:Context_T, args:ParseResult):
     bm = BattleMaster(ctx['group_id'])
     clan = _check_clan(bm)
     mems = bm.list_member(1)
-    l = len(mems)
-    if l > 0:
+    if l := len(mems):
         # 数字太多会被腾讯ban
         mems = map(lambda x: '{uid: <11,d} | {name}'.format_map(x), mems)
         msg = [ f"\n{clan['name']}   {l}/30 人\n____ QQ ____ | 昵称", *mems]
@@ -299,7 +298,7 @@ async def del_challenge(bot:NoneBot, ctx:Context_T, args:ParseResult):
 
 
 # TODO 将预约信息转至数据库
-SUBSCRIBE_PATH = os.path.expanduser('./data/clanbattle_sub/')
+SUBSCRIBE_PATH = os.path.expanduser('~/.hoshino/clanbattle_sub/')
 SUBSCRIBE_MAX = 4
 SUBSCRIBE_TREE_KEY = '0'
 os.makedirs(SUBSCRIBE_PATH, exist_ok=True)

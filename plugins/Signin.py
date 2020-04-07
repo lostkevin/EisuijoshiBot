@@ -2,6 +2,7 @@ from nonebot import CommandSession, on_command, MessageSegment
 from utils.EisuiDB import EisuiDB
 from  utils.Api import get_group_member_list
 from wcwidth import wcswidth as ww
+import datetime
 db = EisuiDB('./data/eisui.db')
 db.debugMode = False
 groupID = 601691323
@@ -14,16 +15,26 @@ def rpad(s, n, c=' '):
 def check(ctx):
     return ctx['message_type'] == 'group' and ctx['group_id'] == groupID and not hasattr(ctx, 'anonymous')
 
+def getBonus():
+    t = datetime.datetime.now()
+    if t.hour in range(1, 6): #1点到5点
+        return 0.5, '[凌晨经验减半]'
+    elif t.hour in range(6, 9): #6点到8点
+        return 2,  '[早起收益加倍]'
+    return 1, ''
+
 @on_command('浇水', only_to_me=False)
 async def _watering(session: CommandSession):
     if check(session.ctx):
         groupLevel = session.ctx['sender']['level']
         expGot, _ = db.getRandomExp(groupLevel)
+        bonus = getBonus()
+        expGot *= bonus[0]
         r = db.doWater(session.ctx['user_id'], session.current_arg, expGot)
         reply = str(MessageSegment.at(session.ctx['sender']['user_id']))
         if r[0]:
             await session.send(r[5][0] + ':' + str(MessageSegment.at(session.ctx['user_id'])) + ', ' + r[1])
-            reply += '本次浇水获得: %d点\n\n' % r[2]
+            reply += '本次浇水获得: %s%d点\n\n' % (bonus[1] , r[2])
             reply += '当前人物好感度: [%s] %d %s成长值: [%s] %d' % (r[3][1],r[3][0], r[5][1], r[4][1], r[4][0])
         else:
             reply += r[1]
@@ -40,7 +51,7 @@ async def _visit(session: CommandSession):
         if r[0]:
             if r[1]:
                 await session.send(r[1][0] + ':' + str(MessageSegment.at(session.ctx['user_id'])) + ', ' + r[1][1])
-            reply += '本次获得声望: [%s] %d, 当前声望值: %d, 距离下一等级: [%s] %d' % (r[6][0], r[2], r[3], r[6][1], r[4])
+            reply += '本次获得声望:  %d, 当前声望值: [%s] %d, 距离下一等级: [%s] %d' % (r[2], r[6][0], r[3], r[6][1], r[4])
         else:
             reply += r[1]
         await session.send(reply)

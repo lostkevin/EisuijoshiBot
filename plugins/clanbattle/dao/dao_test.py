@@ -1,7 +1,7 @@
 import os
 import logging
-from .sqlitedao import DB_PATH
-from .sqlitedao import ClanDao, MemberDao
+from sqlitedao import DB_PATH
+from sqlitedao import ClanDao, MemberDao
 import datetime
 import sqlite3
 
