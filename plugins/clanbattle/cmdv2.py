@@ -13,6 +13,8 @@ import os
 from datetime import datetime, timedelta
 from typing import List
 from matplotlib import pyplot as plt
+import matplotlib
+matplotlib.use('AGG')
 try:
     import ujson as json
 except:
