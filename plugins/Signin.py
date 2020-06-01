@@ -40,7 +40,7 @@ async def _watering(session: CommandSession):
             reply += r[1]
         await session.send(reply) #返回错误原因
         return
-    print('check failed')
+    print(session.ctx['message_type'], '\n', session.ctx['group_id'], '\n', hasattr(session.ctx, 'anonymous'))
 
 @on_command('参拜', only_to_me=False)
 async def _visit(session: CommandSession):
