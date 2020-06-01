@@ -39,6 +39,8 @@ async def _watering(session: CommandSession):
         else:
             reply += r[1]
         await session.send(reply) #返回错误原因
+        return
+    print('check failed')
 
 @on_command('参拜', only_to_me=False)
 async def _visit(session: CommandSession):
