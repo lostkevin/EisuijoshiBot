@@ -36,11 +36,15 @@ async def save_imgData():
         json.dump(pic_data, f)
         f.close()
 
-@scheduler.scheduled_job('interval', seconds=4, max_instances=5)
+@scheduler.scheduled_job('interval', seconds=10, max_instances=5)
 async def fetch_pic(local = False):
     params = {"apikey": "493552455e8c4aab471b45", "r18": "false", "size1200":"true", "num": 5}
     async with aiohttp.request("GET", "https://api.lolicon.app/setu/", params=params) as r:
-        res = json.loads(await r.text(encoding="utf-8"))['data']
+        res = await r.text(encoding="utf-8")
+        try:
+            res = json.loads(res)['data']
+        except json.decoder.JSONDecodeError:
+            print('call API error')
     for data in res:
         try:
             async with aiohttp.request("GET", data['url']) as r:
@@ -77,6 +81,7 @@ async def _(session: CommandSession):
             return
     try:
         count = int(session.current_arg)
+        count = 1 if count > 10 or count <= 0 else count
     except ValueError as e:
         count = 1
     await session.send(_makeMessage(count))
