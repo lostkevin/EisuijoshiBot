@@ -36,9 +36,10 @@ async def save_imgData():
         json.dump(pic_data, f)
         f.close()
 
-@scheduler.scheduled_job('interval', seconds=30, max_instances=5)
-async def fetch_pic(local = False):
-    params = {"apikey": "493552455e8c4aab471b45", "r18": "false", "size1200":"true", "num": 5}
+@scheduler.scheduled_job('interval', seconds=15, max_instances=5)
+async def fetch_pic():
+    print('\n\n\n\n\n\nStart Fetch\n\n\n\n')
+    params = {"apikey": "493552455e8c4aab471b45", "r18": "true", "size1200":"true", "num": 5}
     async with aiohttp.request("GET", "https://api.lolicon.app/setu/", params=params) as r:
         res = await r.text(encoding="utf-8")
         try:
