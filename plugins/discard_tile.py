@@ -48,7 +48,6 @@ def getTile(s: str) -> dict:
     #14*122 try
 
     tmp = copy.deepcopy(tiles)
-
     for t in tiles:
         tmp.remove(t)
         one_try = []
@@ -58,10 +57,10 @@ def getTile(s: str) -> dict:
             if res < baseShanten:
                 one_try.append(i)
             tmp.remove(i)
-        if len(one_try) > 0:
-            test[t]=copy.deepcopy(one_try)
+        t = 4 * (t // 4)
+        if len(one_try) > 0 and t not in test.keys():
+            test[t] = copy.deepcopy(one_try)
         tmp.append(t)
-
     return test
 
 def __cmp(l1, l2):
