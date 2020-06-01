@@ -62,8 +62,8 @@ async def fetch_pic():
                     else:
                         print('Download succeed')
                         pic_data[filename] = data
-        except ssl.SSLError:
-            pass
+        except ssl.SSLError as e:
+            print(e)
 
 @on_command('setu', only_to_me=False)
 async def _(session: CommandSession):
