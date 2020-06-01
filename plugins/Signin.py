@@ -13,7 +13,7 @@ def rpad(s, n, c=' '):
     return s + (n-ww(s)) * c
 
 def check(ctx):
-    return ctx['message_type'] == 'group' and ctx['group_id'] == groupID and not hasattr(ctx, 'anonymous')
+    return ctx['message_type'] == 'group' and ctx['group_id'] == groupID
 
 def getBonus():
     t = datetime.datetime.now()
@@ -26,6 +26,7 @@ def getBonus():
 @on_command('浇水', only_to_me=False)
 async def _watering(session: CommandSession):
     if check(session.ctx):
+        print(session.ctx['anonymous'])
         groupLevel = session.ctx['sender']['level']
         expGot, _ = db.getRandomExp(groupLevel)
         bonus = getBonus()
@@ -40,7 +41,6 @@ async def _watering(session: CommandSession):
             reply += r[1]
         await session.send(reply) #返回错误原因
         return
-    print(session.ctx['message_type'], '\n', session.ctx['group_id'], '\n', hasattr(session.ctx, 'anonymous'))
 
 @on_command('参拜', only_to_me=False)
 async def _visit(session: CommandSession):
