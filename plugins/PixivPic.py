@@ -46,20 +46,20 @@ async def fetch_pic():
             res = json.loads(res)['data']
         except json.decoder.JSONDecodeError:
             print('call API error')
+    print('\n\n\n\n\n\nFetch Raw\n\n\n\n')
     for data in res:
         try:
             async with aiohttp.request("GET", data['url']) as r:
                 filename = data['url'].split("/")[-1]
                 filepath = os.path.join(coolq_dir, img_dir, filename)
+                print('\n\n\n\n\n\nGet Fin\n\n\n\n')
                 if not os.path.exists(filepath):
                     async with aiofiles.open(filepath, 'wb') as f:
                         img = await r.read()
                         await f.write(img)
+                        print('\n\n\n\n\n\nFetch img\n\n\n\n')
                         await f.close()
-                    if imghdr.what(filepath) is None:
-                        print('Download fail')
-                        continue
-                    else:
+                    if imghdr.what(filepath) is not None:
                         print('Download succeed')
                         pic_data[filename] = data
         except ssl.SSLError as e:
