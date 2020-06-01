@@ -36,7 +36,7 @@ async def save_imgData():
         json.dump(pic_data, f)
         f.close()
 
-@scheduler.scheduled_job('interval', seconds=10, max_instances=5)
+@scheduler.scheduled_job('interval', seconds=30, max_instances=5)
 async def fetch_pic(local = False):
     params = {"apikey": "493552455e8c4aab471b45", "r18": "false", "size1200":"true", "num": 5}
     async with aiohttp.request("GET", "https://api.lolicon.app/setu/", params=params) as r:
@@ -55,9 +55,12 @@ async def fetch_pic(local = False):
                         img = await r.read()
                         await f.write(img)
                         await f.close()
-                        if imghdr.what(filepath) is None:
-                            continue
-                    pic_data[filename] = data
+                    if imghdr.what(filepath) is None:
+                        print('Download fail')
+                        continue
+                    else:
+                        print('Download succeed')
+                        pic_data[filename] = data
         except ssl.SSLError:
             pass
 
