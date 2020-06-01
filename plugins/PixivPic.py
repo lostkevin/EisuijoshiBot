@@ -38,13 +38,13 @@ async def save_imgData():
 
 @scheduler.scheduled_job('interval', seconds=15, max_instances=5)
 async def fetch_pic():
-    params = {"apikey": "493552455e8c4aab471b45", "r18": "true", "size1200":"true", "num": 5}
+    params = {"apikey": "773489055ed4c9a9101711", "r18": "true", "size1200":"true", "num": 5}
     async with aiohttp.request("GET", "https://api.lolicon.app/setu/", params=params) as r:
         res = await r.text(encoding="utf-8")
         try:
-            print(res)
             res = json.loads(res)['data']
-            print(res)
+            if len(res) == 0:
+                print("达到调用额度限制")
         except json.decoder.JSONDecodeError:
             print('call API error')
     for data in res:
@@ -52,12 +52,10 @@ async def fetch_pic():
             async with aiohttp.request("GET", data['url']) as r:
                 filename = data['url'].split("/")[-1]
                 filepath = os.path.join(coolq_dir, img_dir, filename)
-                print('\n\n\n\n\n\nGet Fin\n\n\n\n')
                 if not os.path.exists(filepath):
                     async with aiofiles.open(filepath, 'wb') as f:
                         img = await r.read()
                         await f.write(img)
-                        print('\n\n\n\n\n\nFetch img\n\n\n\n')
                         await f.close()
                     if imghdr.what(filepath) is not None:
                         print('Download succeed')
